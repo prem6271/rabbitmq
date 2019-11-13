@@ -3,10 +3,10 @@ var amqp = require('amqplib');
 amqp.connect('amqp://localhost').then(function(conn) {
   process.once('SIGINT', function() { conn.close(); });
   return conn.createChannel().then(function(ch) {
-    var ok = ch.assertQueue('db_connection_queue1', {durable: true});
+    var ok = ch.assertQueue('db_connection_queue', {durable: true});
     ok = ok.then(function() { ch.prefetch(1); });
     ok = ok.then(function() {
-      ch.consume('db_connection_queue1', doWork, {noAck: false});
+      ch.consume('db_connection_queue', doWork, {noAck: false});
     });
     return ok;
 
